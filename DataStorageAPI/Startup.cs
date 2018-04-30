@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using DataStorageAPI.Models;
+using DataStorage.Service.Common;
+using DataStorage.Repository.Common;
+using DataStorage.Service;
+using DataStorage.Repository;
+using DataStorage.Model.Common;
+using DataStorage.Model;
+using Microsoft.AspNetCore.Http;
 
 namespace DataStorageAPI
 {
@@ -29,6 +33,26 @@ namespace DataStorageAPI
         {
             // Add framework services.
             services.AddMvc();
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+
+            //Add architecture bindings 
+            services.AddScoped<ISchemaService, SchemaService>();
+            services.AddScoped<IResourceService, ResourceService>();
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddScoped<IResourceRepository, ResourceRepository>();
+            services.AddScoped<ISchemaRepository, SchemaRepository>();
+            services.AddScoped<ISchema, Schema>();
+            services.AddScoped<IResource, Resource>();
+
+            services.Configure<Settings>(options =>
+            {
+                options.ConnectionString
+                    = Configuration.GetSection("MongoConnection:ConnectionString").Value;
+                options.Database
+                    = Configuration.GetSection("MongoConnection:Database").Value;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

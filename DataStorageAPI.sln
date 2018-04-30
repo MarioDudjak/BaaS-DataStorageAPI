@@ -3,7 +3,37 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataStorageAPI", "DataStorageAPI\DataStorageAPI.csproj", "{0782069C-14C7-401B-9DC0-E32E22C33087}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataStorageAPI", "DataStorageAPI\DataStorageAPI.csproj", "{0782069C-14C7-401B-9DC0-E32E22C33087}"
+	ProjectSection(ProjectDependencies) = postProject
+		{53A2BD5D-73A6-4934-A9F2-85D0828DA057} = {53A2BD5D-73A6-4934-A9F2-85D0828DA057}
+		{C149736F-8587-4960-A90E-8774D98B0285} = {C149736F-8587-4960-A90E-8774D98B0285}
+		{EE779AE0-7080-4F4E-96A7-62FFE7F9010F} = {EE779AE0-7080-4F4E-96A7-62FFE7F9010F}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataStorage.Service", "DataStorage.Service\DataStorage.Service.csproj", "{EE779AE0-7080-4F4E-96A7-62FFE7F9010F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6AAA1743-F2DF-498E-AB36-4E0C1534064E} = {6AAA1743-F2DF-498E-AB36-4E0C1534064E}
+		{C149736F-8587-4960-A90E-8774D98B0285} = {C149736F-8587-4960-A90E-8774D98B0285}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataStorage.Repository", "DataStorage.Repository\DataStorage.Repository.csproj", "{6AAA1743-F2DF-498E-AB36-4E0C1534064E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C149736F-8587-4960-A90E-8774D98B0285} = {C149736F-8587-4960-A90E-8774D98B0285}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataStorage.Service.Common", "DataStorage.Service.Common\DataStorage.Service.Common.csproj", "{53A2BD5D-73A6-4934-A9F2-85D0828DA057}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C149736F-8587-4960-A90E-8774D98B0285} = {C149736F-8587-4960-A90E-8774D98B0285}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataStorage.Repository.Common", "DataStorage.Repository.Common\DataStorage.Repository.Common.csproj", "{C149736F-8587-4960-A90E-8774D98B0285}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataStorage.Model", "DataStorage.Model\DataStorage.Model.csproj", "{86ACB276-3502-4EB2-9F89-05133FD87580}"
+	ProjectSection(ProjectDependencies) = postProject
+		{70A06945-E59C-4410-8D63-416E7C3E8EBC} = {70A06945-E59C-4410-8D63-416E7C3E8EBC}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataStorage.Model.Common", "DataStorage.Model.Common\DataStorage.Model.Common.csproj", "{70A06945-E59C-4410-8D63-416E7C3E8EBC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +45,30 @@ Global
 		{0782069C-14C7-401B-9DC0-E32E22C33087}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0782069C-14C7-401B-9DC0-E32E22C33087}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0782069C-14C7-401B-9DC0-E32E22C33087}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE779AE0-7080-4F4E-96A7-62FFE7F9010F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE779AE0-7080-4F4E-96A7-62FFE7F9010F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE779AE0-7080-4F4E-96A7-62FFE7F9010F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE779AE0-7080-4F4E-96A7-62FFE7F9010F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AAA1743-F2DF-498E-AB36-4E0C1534064E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AAA1743-F2DF-498E-AB36-4E0C1534064E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AAA1743-F2DF-498E-AB36-4E0C1534064E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AAA1743-F2DF-498E-AB36-4E0C1534064E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53A2BD5D-73A6-4934-A9F2-85D0828DA057}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53A2BD5D-73A6-4934-A9F2-85D0828DA057}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53A2BD5D-73A6-4934-A9F2-85D0828DA057}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53A2BD5D-73A6-4934-A9F2-85D0828DA057}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C149736F-8587-4960-A90E-8774D98B0285}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C149736F-8587-4960-A90E-8774D98B0285}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C149736F-8587-4960-A90E-8774D98B0285}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C149736F-8587-4960-A90E-8774D98B0285}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86ACB276-3502-4EB2-9F89-05133FD87580}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86ACB276-3502-4EB2-9F89-05133FD87580}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86ACB276-3502-4EB2-9F89-05133FD87580}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86ACB276-3502-4EB2-9F89-05133FD87580}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70A06945-E59C-4410-8D63-416E7C3E8EBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70A06945-E59C-4410-8D63-416E7C3E8EBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70A06945-E59C-4410-8D63-416E7C3E8EBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70A06945-E59C-4410-8D63-416E7C3E8EBC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

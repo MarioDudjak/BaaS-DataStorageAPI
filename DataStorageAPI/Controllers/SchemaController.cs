@@ -1,4 +1,7 @@
+using DataStorage.Model.Common;
+using DataStorage.Service.Common;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace DataStorageAPI.Controllers
 {
@@ -7,36 +10,117 @@ namespace DataStorageAPI.Controllers
     public class SchemaController : Controller
     {
 
-        // GET: data/schemas?searchQuery={searchQuery}&page={page}&rpp={rpp}&sort={sort}
-        [HttpGet("searchQuery={searchQuery}&page={page}&rpp={rpp}&sort={sort}", Name = "GetBySearchCriteria")]
-        public string GetBySearchCriteria(string searchQuery, int page, int rpp, string sort)
+        #region Properties
+
+        protected ISchemaService SchemaService { get; private set; }
+
+        #endregion Properties
+
+        #region Constructors
+
+        public SchemaController(ISchemaService resourceService)
         {
-            return "value";
+            SchemaService = resourceService;
+        }
+
+        #endregion Constructors
+
+        #region Methods
+
+        // GET: data/schemas?searchQuery="where 'age' = 15"&page=1&rpp=15&sort=asc
+        [HttpGet(Name = "GetBySearchCriteria")]
+        [ProducesResponseType(200, Type = typeof(ISchema))]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> GetBySearchCriteria([FromQuery] string searchQuery, [FromQuery] int page, [FromQuery] int rpp, [FromQuery] string sort)
+        {
+            ISchema schema = null; //await this.SchemaService.GetBySearchCriteria(searchQuery,page,rpp,sort);
+            if (schema != null)
+            {
+                return Ok(new { result = schema });
+            }
+            else
+            {
+                return NotFound(new { message = "Schema is not found." });
+            }
         }
 
         // GET: data/schemas/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        [HttpGet("{id}", Name = "GetById")]
+        [ProducesResponseType(200, Type = typeof(ISchema))]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            ISchema schema = null; //await this.SchemaService.Get(id);
+            if (schema != null)
+            {
+                return Ok(new { result = schema });
+            }
+            else
+            {
+                return NotFound(new { message = "Schema is not found." });
+            }
+              
         }
 
         // POST: data/schemas
         [HttpPost]
-        public void Post([FromBody]string value)
+        [ProducesResponseType(400)]
+        [ProducesResponseType(201, Type = typeof(ISchema))]
+        public async Task<IActionResult> Post([FromBody] ISchema schema)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            ISchema newSchema =null;//await this.SchemaService.Create(schema);
+            
+            return Created(Url.RouteUrl(newSchema.Id), newSchema.Id);      
         }
 
         // PUT: data/schemas/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> Put(int id, [FromBody] ISchema schema)
         {
+            
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            ISchema newSchema = null;//await this.SchemaService.Update(schema);
+
+            if (newSchema != null)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return NotFound(new { message = "Schema is not found." });
+            }
         }
 
         // DELETE: data/schemas/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> Delete(int id)
         {
+            ISchema newSchema = null;//await this.SchemaService.Delete(schema);
+
+            if (newSchema != null)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return NotFound(new { message = "Schema is not found." });
+            }
         }
+
+    #endregion Methods
     }
 }
