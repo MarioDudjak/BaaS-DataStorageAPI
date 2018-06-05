@@ -1,6 +1,9 @@
 using DataStorage.Model.Common;
 using DataStorage.Service.Common;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DataStorageAPI.Controllers
@@ -28,15 +31,15 @@ namespace DataStorageAPI.Controllers
         #region Methods
 
         // GET: data/resources/myScheme?searchQuery="where 'age'=15"&page=1&rpp=10&sort=asc
-        [HttpGet( Name = "GetBySearchCriteria")]
-        [ProducesResponseType(200, Type = typeof(IResource))]
+        [HttpGet("{schemaName}", Name = "GetBySearchCriteria")]
+        [ProducesResponseType(200, Type = typeof(ICollection<IResource>))]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> GetBySearchCriteria([FromQuery] string searchQuery, [FromQuery] int page, [FromQuery] int rpp, [FromQuery] string sort)
+        public async Task<IActionResult> GetBySearchCriteria(string schemaName, [FromQuery] string searchQuery, [FromQuery] int page, [FromQuery] int rpp, [FromQuery] string sort)
         {
-            IResource resource = null; //await this.ResourceService.GetBySearchCriteria(searchQuery,page,rpp,sort);
-            if (resource != null)
+            ICollection<IResource> resources = await this.ResourceService.GetBySearchCriteriaAsync("", schemaName, searchQuery, page, rpp, sort);
+            if (resources.Count!=0)
             {
-                return Ok(new { result = resource });
+                return Ok(new { result = resources });
             }
             else
             {
@@ -49,9 +52,9 @@ namespace DataStorageAPI.Controllers
         [HttpGet("{schemaName}/{id}", Name = "Get")]
         [ProducesResponseType(200, Type = typeof(IResource))]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> Get(string schemaName, int id)
+        public async Task<IActionResult> Get(string schemaName, Guid id)
         {
-            IResource resource = null; //await this.ResourceService.Get(id);
+            IResource resource = await this.ResourceService.GetByIdAsync(id, "", schemaName);
             if (resource != null)
             {
                 return Ok(new { result = resource });
@@ -66,16 +69,23 @@ namespace DataStorageAPI.Controllers
         [HttpPost("{schemaName}")]
         [ProducesResponseType(400)]
         [ProducesResponseType(201, Type = typeof(IResource))]
+        [ProducesResponseType(409)]
         public async Task<IActionResult> Post(string schemaName, [FromBody] IResource resource)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            IResource newResource = null;//await this.ResourceService.Create(resource);
-
-            return Created(Url.RouteUrl(newResource.Id), newResource.Id);
+            
+            IResource newResource = await this.ResourceService.AddAsync(resource, "", schemaName);
+            if (newResource != null)
+            {
+                return Created(Url.RouteUrl(newResource.Id), newResource.Id);
+            }
+            else
+            {
+                return new StatusCodeResult(StatusCodes.Status409Conflict);
+            }
         }
 
         // PUT: api/Resource/5
@@ -90,9 +100,9 @@ namespace DataStorageAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            IResource newResource = null;//await this.ResourceService.Update(resource);
+            bool updateSucceeded= await this.ResourceService.UpdateAsync(resource, "", schemaName);
 
-            if (newResource != null)
+            if (updateSucceeded != false)
             {
                 return NoContent();
             }
@@ -107,11 +117,11 @@ namespace DataStorageAPI.Controllers
         [HttpDelete("{schemaName}/{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> Delete(string schemaName, int id)
+        public async Task<IActionResult> Delete(string schemaName, Guid id)
         {
-            IResource newResource = null;//await this.ResourceService.Delete(resource);
+            bool deleteSuceeded= await this.ResourceService.DeleteAsync(id, "", schemaName);
 
-            if (newResource != null)
+            if (deleteSuceeded != false)
             {
                 return NoContent();
             }

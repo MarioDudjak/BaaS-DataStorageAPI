@@ -4,4 +4,8 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DataStorage.Model.Common\DataStorage.Model.Common.csproj" />
+  </ItemGroup>
+
 </Project>

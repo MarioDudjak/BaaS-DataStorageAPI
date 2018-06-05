@@ -1,6 +1,9 @@
 using DataStorage.Model.Common;
 using DataStorage.Service.Common;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DataStorageAPI.Controllers
@@ -33,10 +36,10 @@ namespace DataStorageAPI.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> GetBySearchCriteria([FromQuery] string searchQuery, [FromQuery] int page, [FromQuery] int rpp, [FromQuery] string sort)
         {
-            ISchema schema = null; //await this.SchemaService.GetBySearchCriteria(searchQuery,page,rpp,sort);
-            if (schema != null)
+            ICollection<ISchema> schemas = await this.SchemaService.GetBySearchCriteriaAsync("",searchQuery,page,rpp,sort);
+            if (schemas.Count!=0)
             {
-                return Ok(new { result = schema });
+                return Ok(new { result = schemas });
             }
             else
             {
@@ -48,9 +51,9 @@ namespace DataStorageAPI.Controllers
         [HttpGet("{id}", Name = "GetById")]
         [ProducesResponseType(200, Type = typeof(ISchema))]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(Guid id)
         {
-            ISchema schema = null; //await this.SchemaService.Get(id);
+            ISchema schema = await this.SchemaService.GetByIdAsync(id, "");
             if (schema != null)
             {
                 return Ok(new { result = schema });
@@ -66,6 +69,7 @@ namespace DataStorageAPI.Controllers
         [HttpPost]
         [ProducesResponseType(400)]
         [ProducesResponseType(201, Type = typeof(ISchema))]
+        [ProducesResponseType(409)]
         public async Task<IActionResult> Post([FromBody] ISchema schema)
         {
             if (!ModelState.IsValid)
@@ -73,9 +77,15 @@ namespace DataStorageAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            ISchema newSchema =null;//await this.SchemaService.Create(schema);
-            
-            return Created(Url.RouteUrl(newSchema.Id), newSchema.Id);      
+            ISchema newSchema = await this.SchemaService.AddAsync(schema,"");
+            if (newSchema != null)
+            {
+                return Created(Url.RouteUrl(newSchema.Id), newSchema.Id);      // Tu još treba vidjet jel Id ili Name
+            }
+            else
+            {
+                return new StatusCodeResult(StatusCodes.Status409Conflict);
+            }
         }
 
         // PUT: data/schemas/5
@@ -91,9 +101,9 @@ namespace DataStorageAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            ISchema newSchema = null;//await this.SchemaService.Update(schema);
+            bool updateSucceeded =  await this.SchemaService.UpdateAsync(schema, "");
 
-            if (newSchema != null)
+            if (updateSucceeded != false)
             {
                 return NoContent();
             }
@@ -107,11 +117,11 @@ namespace DataStorageAPI.Controllers
         [HttpDelete("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            ISchema newSchema = null;//await this.SchemaService.Delete(schema);
+            bool deleteSucceeded = await this.SchemaService.DeleteAsync(id,"");
 
-            if (newSchema != null)
+            if (deleteSucceeded != false)
             {
                 return NoContent();
             }

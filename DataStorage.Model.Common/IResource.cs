@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace DataStorage.Model.Common
 {
-    public interface IResource
+    public interface IResource : IDocument
     {
-        int Id { get; set; }
+       JObject Data { get; set; }
 
     }
 }

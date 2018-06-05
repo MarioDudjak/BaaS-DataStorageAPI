@@ -1,0 +1,6 @@
+{
+  "MongoDBDatabaseSettings": {
+    "ConnectionString": "Hi!",
+    "DatabaseName": "Hello!"
+  } 
+}

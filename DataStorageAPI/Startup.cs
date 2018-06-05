@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using DataStorageAPI.Models;
 using DataStorage.Service.Common;
 using DataStorage.Repository.Common;
 using DataStorage.Service;
@@ -46,13 +45,7 @@ namespace DataStorageAPI
             services.AddScoped<ISchema, Schema>();
             services.AddScoped<IResource, Resource>();
 
-            services.Configure<Settings>(options =>
-            {
-                options.ConnectionString
-                    = Configuration.GetSection("MongoConnection:ConnectionString").Value;
-                options.Database
-                    = Configuration.GetSection("MongoConnection:Database").Value;
-            });
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
